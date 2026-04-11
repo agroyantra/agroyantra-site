@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% block title %}AgriTech Equipment & Products | AgroYantra Nepal{% endblock %}
+{% block meta_description %}Browse modern agricultural equipment, irrigation systems, greenhouse structures, poultry gear, and more. Available in-stock and on-order from AgroYantra Nepal.{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<div class="bg-white border-b">
+    <div class="max-w-7xl mx-auto px-4 py-2.5 text-sm text-gray-500 flex items-center gap-2">
+        <a href="{% url 'home' %}" class="hover:text-primary">Home</a>
+        <i class="fas fa-chevron-right text-xs"></i>
+        <span class="text-gray-800 font-medium">All Products</span>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 py-8 sm:py-10">
+    <div class="flex flex-col lg:flex-row gap-8">
+
+        <!-- Sidebar Filters -->
+        <aside class="lg:w-56 flex-shrink-0">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sticky top-24">
+                <h2 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <i class="fas fa-filter text-primary"></i> Filters
+                </h2>
+                <form method="GET">
+                    <div class="mb-4">
+                        <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Category</p>
+                        <div class="space-y-1.5">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="category" value="" {% if not selected_category %}checked{% endif %} onchange="this.form.submit()" class="accent-primary">
+                                <span class="text-sm text-gray-700">All Categories</span>
+                            </label>
+                            {% for cat in categories %}
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="category" value="{{ cat.slug }}" {% if selected_category.slug == cat.slug %}checked{% endif %} onchange="this.form.submit()" class="accent-primary">
+                                <span class="text-sm text-gray-700">{{ cat.category_name }}</span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="border-t pt-4">
+                        <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Availability</p>
+                        <div class="space-y-1.5">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="availability" value="" {% if not selected_availability %}checked{% endif %} onchange="this.form.submit()" class="accent-primary">
+                                <span class="text-sm text-gray-700">All</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="availability" value="in_stock" {% if selected_availability == 'in_stock' %}checked{% endif %} onchange="this.form.submit()" class="accent-primary">
+                                <span class="text-sm text-gray-700">In Stock</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="availability" value="on_order" {% if selected_availability == 'on_order' %}checked{% endif %} onchange="this.form.submit()" class="accent-primary">
+                                <span class="text-sm text-gray-700">Available on Order</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="availability" value="overseas" {% if selected_availability == 'overseas' %}checked{% endif %} onchange="this.form.submit()" class="accent-primary">
+                                <span class="text-sm text-gray-700">Overseas / Import</span>
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </aside>
+
+        <!-- Products Grid -->
+        <div class="flex-1 min-w-0">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+                <div>
+                    <h1 class="text-2xl font-extrabold text-gray-900">
+                        {% if selected_category %}{{ selected_category.category_name }}{% else %}All Products{% endif %}
+                    </h1>
+                    <p class="text-sm text-gray-500 mt-0.5">{{ product_count }} product{{ product_count|pluralize }} found</p>
+                </div>
+                {% if selected_category or selected_availability %}
+                <a href="{% url 'product_list' %}" class="text-sm text-red-500 hover:underline flex items-center gap-1"><i class="fas fa-times-circle"></i> Clear filters</a>
+                {% endif %}
+            </div>
+
+            {% if products %}
+            <div class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
+                {% for product in products %}
+                <article class="bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-200 group flex flex-col">
+                    <a href="{{ product.get_url }}" class="block overflow-hidden rounded-t-2xl relative">
+                        {% if product.images %}
+                        <img src="{{ product.images.url }}" alt="{{ product.product_name }}" loading="lazy"
+                            class="w-full h-44 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                        {% else %}
+                        <div class="w-full h-44 sm:h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                            <i class="fas fa-cog text-gray-300 text-5xl"></i>
+                        </div>
+                        {% endif %}
+                        <!-- Availability badge -->
+                        <span class="absolute top-2 left-2 text-xs font-bold px-2 py-0.5 rounded-full
+                            {% if product.availability == 'in_stock' %}bg-green-100 text-green-700
+                            {% elif product.availability == 'on_order' %}bg-blue-100 text-blue-700
+                            {% elif product.availability == 'overseas' %}bg-purple-100 text-purple-700
+                            {% else %}bg-gray-100 text-gray-600{% endif %}">
+                            {% if product.availability == 'in_stock' %}In Stock
+                            {% elif product.availability == 'on_order' %}On Order
+                            {% elif product.availability == 'overseas' %}Import
+                            {% elif product.availability == 'out_of_stock' %}Out of Stock
+                            {% else %}{{ product.get_availability_display }}{% endif %}
+                        </span>
+                        {% if product.is_featured %}
+                        <span class="absolute top-2 right-2 bg-accent text-primary-dark text-xs font-black px-2 py-0.5 rounded-full">Featured</span>
+                        {% endif %}
+                    </a>
+                    <div class="p-4 flex flex-col flex-1">
+                        <p class="text-xs text-primary font-semibold mb-1">{{ product.category.category_name }}</p>
+                        <a href="{{ product.get_url }}">
+                            <h2 class="font-bold text-gray-800 text-sm leading-snug hover:text-primary transition line-clamp-2 mb-auto">{{ product.product_name }}</h2>
+                        </a>
+                        {% if product.brand %}
+                        <p class="text-xs text-gray-400 mt-1">{{ product.brand }}</p>
+                        {% endif %}
+                        <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-50">
+                            <div>
+                                {% if product.show_price and product.price %}
+                                    {% if product.discount_price %}
+                                    <p class="text-primary font-black text-sm">Rs. {{ product.discount_price }}</p>
+                                    <p class="text-gray-400 text-xs line-through">Rs. {{ product.price }}</p>
+                                    {% else %}
+                                    <p class="text-primary font-black text-sm">Rs. {{ product.price }}</p>
+                                    {% endif %}
+                                {% else %}
+                                <p class="text-primary font-semibold text-xs">Contact for Price</p>
+                                {% endif %}
+                            </div>
+                            {% if product.is_orderable %}
+                            <a href="{% url 'add_cart' product.id %}"
+                                class="bg-primary hover:bg-primary-dark text-white text-xs font-bold px-3 py-2 rounded-full transition flex items-center gap-1 flex-shrink-0">
+                                <i class="fas fa-cart-plus"></i><span class="hidden xs:inline">Add</span>
+                            </a>
+                            {% else %}
+                            <span class="text-xs text-red-400 font-medium">Unavailable</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if products.has_other_pages %}
+            <nav class="flex justify-center mt-10 gap-2 flex-wrap" aria-label="Pagination">
+                {% if products.has_previous %}
+                <a href="?page={{ products.previous_page_number }}{% if selected_category %}&category={{ selected_category.slug }}{% endif %}" class="px-4 py-2 bg-white border rounded-lg text-sm hover:bg-gray-50">&laquo; Prev</a>
+                {% endif %}
+                {% for num in products.paginator.page_range %}
+                <a href="?page={{ num }}{% if selected_category %}&category={{ selected_category.slug }}{% endif %}"
+                    class="px-4 py-2 rounded-lg text-sm border {% if products.number == num %}bg-primary text-white border-primary{% else %}bg-white hover:bg-gray-50{% endif %}">{{ num }}</a>
+                {% endfor %}
+                {% if products.has_next %}
+                <a href="?page={{ products.next_page_number }}{% if selected_category %}&category={{ selected_category.slug }}{% endif %}" class="px-4 py-2 bg-white border rounded-lg text-sm hover:bg-gray-50">Next &raquo;</a>
+                {% endif %}
+            </nav>
+            {% endif %}
+
+            {% else %}
+            <div class="text-center py-20 bg-white rounded-2xl border border-gray-100 text-gray-400">
+                <i class="fas fa-search text-6xl mb-4"></i>
+                <p class="text-xl font-medium text-gray-600">No products found</p>
+                <a href="{% url 'product_list' %}" class="mt-4 inline-block text-primary hover:underline font-medium">Clear filters</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title %}My Cart - AgroYantra{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-10">
+    <h1 class="text-2xl font-bold text-gray-900 mb-8">
+        <i class="fas fa-shopping-cart text-primary mr-2"></i>Shopping Cart
+    </h1>
+
+    {% if cart_items %}
+    <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Cart Items -->
+        <div class="flex-1">
+            <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+                <table class="w-full">
+                    <thead class="bg-gray-50 border-b">
+                        <tr>
+                            <th class="text-left px-6 py-4 text-sm font-semibold text-gray-600">Product</th>
+                            <th class="text-center px-4 py-4 text-sm font-semibold text-gray-600">Price</th>
+                            <th class="text-center px-4 py-4 text-sm font-semibold text-gray-600">Quantity</th>
+                            <th class="text-center px-4 py-4 text-sm font-semibold text-gray-600">Subtotal</th>
+                            <th class="px-4 py-4"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        {% for item in cart_items %}
+                        <tr>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-4">
+                                    {% if item.product.images %}
+                                    <img src="{{ item.product.images.url }}" alt="{{ item.product.product_name }}"
+                                        class="w-16 h-16 object-cover rounded-lg">
+                                    {% else %}
+                                    <div class="w-16 h-16 bg-green-50 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-image text-gray-300 text-xl"></i>
+                                    </div>
+                                    {% endif %}
+                                    <div>
+                                        <p class="font-semibold text-gray-800 text-sm">{{ item.product.product_name }}</p>
+                                        <p class="text-xs text-gray-400">{{ item.product.category.category_name }}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-4 py-4 text-center text-sm text-gray-700">Rs. {{ item.product.price }}</td>
+                            <td class="px-4 py-4">
+                                <div class="flex items-center justify-center gap-2">
+                                    <a href="{% url 'remove_cart' item.product.id item.id %}"
+                                        class="w-7 h-7 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center text-sm transition">
+                                        <i class="fas fa-minus text-xs"></i>
+                                    </a>
+                                    <span class="w-8 text-center font-semibold text-sm">{{ item.quantity }}</span>
+                                    <a href="{% url 'add_cart' item.product.id %}"
+                                        class="w-7 h-7 bg-primary hover:bg-primary-dark text-white rounded-full flex items-center justify-center text-sm transition">
+                                        <i class="fas fa-plus text-xs"></i>
+                                    </a>
+                                </div>
+                            </td>
+                            <td class="px-4 py-4 text-center font-semibold text-primary text-sm">Rs. {{ item.sub_total }}</td>
+                            <td class="px-4 py-4 text-center">
+                                <a href="{% url 'remove_cart_item' item.product.id item.id %}"
+                                    class="text-red-400 hover:text-red-600 transition">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4 flex justify-between">
+                <a href="{% url 'product_list' %}" class="text-primary hover:underline text-sm font-medium">
+                    <i class="fas fa-arrow-left mr-1"></i>Continue Shopping
+                </a>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="lg:w-80">
+            <div class="bg-white rounded-2xl shadow-sm p-6 sticky top-24">
+                <h2 class="text-lg font-bold text-gray-900 mb-6">Order Summary</h2>
+                <div class="space-y-3 text-sm">
+                    <div class="flex justify-between text-gray-600">
+                        <span>Subtotal ({{ quantity }} items)</span>
+                        <span>Rs. {{ total }}</span>
+                    </div>
+                    <div class="flex justify-between text-gray-600">
+                        <span>VAT (13%)</span>
+                        <span>Rs. {{ tax|floatformat:2 }}</span>
+                    </div>
+                    <div class="flex justify-between text-gray-600">
+                        <span>Delivery</span>
+                        <span class="text-green-600 font-medium">Free</span>
+                    </div>
+                    <div class="border-t pt-3 flex justify-between font-bold text-gray-900 text-base">
+                        <span>Total</span>
+                        <span class="text-primary">Rs. {{ grand_total|floatformat:2 }}</span>
+                    </div>
+                </div>
+
+                <!-- COD notice -->
+                <div class="mt-4 bg-orange-50 border border-orange-100 rounded-lg p-3 flex items-center gap-2">
+                    <i class="fas fa-hand-holding-usd text-accent"></i>
+                    <p class="text-xs text-gray-600">Payment by <strong>Cash on Delivery</strong> only</p>
+                </div>
+
+                <a href="{% url 'checkout' %}"
+                    class="mt-6 block w-full text-center bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-full transition shadow">
+                    Proceed to Checkout <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    <div class="text-center py-20 text-gray-400 bg-white rounded-2xl shadow-sm">
+        <i class="fas fa-shopping-cart text-6xl mb-4"></i>
+        <p class="text-xl font-medium text-gray-700">Your cart is empty</p>
+        <p class="text-sm mt-2">Browse our equipment catalogue to get started!</p>
+        <a href="{% url 'product_list' %}" class="mt-6 inline-flex items-center gap-2 bg-primary text-white font-bold px-8 py-3 rounded-full hover:bg-primary-dark transition">
+            <i class="fas fa-shopping-basket"></i> Start Shopping
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

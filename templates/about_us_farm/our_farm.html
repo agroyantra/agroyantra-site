@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}Our Projects - AgroYantra AgriTech Solutions{% endblock %}
+
+{% block content %}
+<section class="bg-primary-dark text-white py-20">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+        <span class="text-accent font-bold text-xs uppercase tracking-widest">Portfolio</span>
+        <h1 class="text-4xl font-extrabold mt-3 mb-4">Our Completed Projects</h1>
+        <p class="text-gray-300 text-lg">Turnkey agri-infrastructure projects delivered across Nepal.</p>
+    </div>
+</section>
+
+<div class="max-w-6xl mx-auto px-4 py-14">
+
+    <!-- Project Types -->
+    <div class="grid md:grid-cols-2 gap-8 mb-16">
+        <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-warehouse text-primary text-xl"></i>
+                </div>
+                <h3 class="font-bold text-xl text-gray-900">Greenhouse Projects</h3>
+            </div>
+            <p class="text-gray-500 text-sm leading-relaxed">Complete polyhouse and greenhouse farm setups — from foundation, structure, and cladding to irrigation, climate control, and crop planning. Delivered for vegetables, flowers, and nursery operations.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-drumstick-bite text-primary text-xl"></i>
+                </div>
+                <h3 class="font-bold text-xl text-gray-900">Poultry Units</h3>
+            </div>
+            <p class="text-gray-500 text-sm leading-relaxed">Fully automated layer, broiler, and hatchery units with ventilation, feeding, watering, and egg collection systems. From 500 to 50,000 bird capacity.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-fish text-primary text-xl"></i>
+                </div>
+                <h3 class="font-bold text-xl text-gray-900">Aquaculture Farms</h3>
+            </div>
+            <p class="text-gray-500 text-sm leading-relaxed">RAS (Recirculating Aquaculture Systems), pond-based fish farms, and biofloc units. Complete with aeration, water quality management, and feeding systems.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-tint text-primary text-xl"></i>
+                </div>
+                <h3 class="font-bold text-xl text-gray-900">Irrigation Networks</h3>
+            </div>
+            <p class="text-gray-500 text-sm leading-relaxed">Drip, sprinkler, and micro-irrigation systems for smallholder and commercial farms. Includes pump stations, filtration, fertigation, and automation.</p>
+        </div>
+    </div>
+
+    <!-- Process -->
+    <div class="bg-primary-dark rounded-3xl p-10 mb-16">
+        <div class="text-center mb-10">
+            <span class="text-accent font-bold text-xs uppercase tracking-widest">How It Works</span>
+            <h2 class="text-2xl font-extrabold text-white mt-2">Our Turnkey Process</h2>
+        </div>
+        <div class="grid md:grid-cols-4 gap-6">
+            {% for step in "1234" %}
+            {% if forloop.counter == 1 %}
+            <div class="text-center">
+                <div class="w-14 h-14 bg-accent rounded-full flex items-center justify-center mx-auto mb-3 text-primary-dark font-black text-lg">1</div>
+                <h4 class="font-bold text-white mb-1">Consultation</h4>
+                <p class="text-gray-400 text-xs">Understand your goals, land, budget, and requirements.</p>
+            </div>
+            {% elif forloop.counter == 2 %}
+            <div class="text-center">
+                <div class="w-14 h-14 bg-accent/30 border-2 border-accent rounded-full flex items-center justify-center mx-auto mb-3 text-accent font-black text-lg">2</div>
+                <h4 class="font-bold text-white mb-1">Design & Plan</h4>
+                <p class="text-gray-400 text-xs">Feasibility study, layout design, BOQ and timeline.</p>
+            </div>
+            {% elif forloop.counter == 3 %}
+            <div class="text-center">
+                <div class="w-14 h-14 bg-accent/30 border-2 border-accent rounded-full flex items-center justify-center mx-auto mb-3 text-accent font-black text-lg">3</div>
+                <h4 class="font-bold text-white mb-1">Build & Install</h4>
+                <p class="text-gray-400 text-xs">Procurement, civil work, equipment installation.</p>
+            </div>
+            {% elif forloop.counter == 4 %}
+            <div class="text-center">
+                <div class="w-14 h-14 bg-accent/30 border-2 border-accent rounded-full flex items-center justify-center mx-auto mb-3 text-accent font-black text-lg">4</div>
+                <h4 class="font-bold text-white mb-1">Handover</h4>
+                <p class="text-gray-400 text-xs">Training, commissioning, and ongoing support.</p>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="text-center">
+        <h2 class="text-2xl font-extrabold text-gray-900 mb-3">Start Your Project Today</h2>
+        <p class="text-gray-500 mb-6">Free site assessment and feasibility study for all new project enquiries.</p>
+        <a href="{% url 'contact' %}" class="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-black px-8 py-3 rounded-full transition shadow">
+            <i class="fas fa-phone"></i> Enquire Now
+        </a>
+    </div>
+</div>
+{% endblock %}

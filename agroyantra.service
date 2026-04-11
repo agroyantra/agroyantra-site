@@ -1,0 +1,15 @@
+[Unit]
+Description=AgroYantra Gunicorn Daemon
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/agroyantra
+ExecStart=/var/www/agroyantra/venv/bin/gunicorn \
+    --config /var/www/agroyantra/gunicorn.conf.py \
+    ojasecommerce.wsgi:application
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

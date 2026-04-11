@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Search: {{ keyword }} - AgroYantra{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-10">
+    <div class="mb-8">
+        <h1 class="text-2xl font-bold text-gray-900">
+            {% if keyword %}Search results for "<span class="text-primary">{{ keyword }}</span>"{% else %}Search Products{% endif %}
+        </h1>
+        {% if keyword %}
+        <p class="text-sm text-gray-500 mt-1">{{ product_count }} result{{ product_count|pluralize }} found</p>
+        {% endif %}
+    </div>
+
+    {% if products %}
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+        {% for product in products %}
+        <div class="bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition group">
+            <a href="{{ product.get_url }}">
+                {% if product.images %}
+                <img src="{{ product.images.url }}" alt="{{ product.product_name }}" class="w-full h-44 object-cover rounded-t-xl">
+                {% else %}
+                <div class="w-full h-44 bg-green-50 rounded-t-xl flex items-center justify-center">
+                    <i class="fas fa-image text-gray-300 text-4xl"></i>
+                </div>
+                {% endif %}
+            </a>
+            <div class="p-4">
+                <a href="{{ product.get_url }}">
+                    <h3 class="font-semibold text-sm truncate hover:text-primary">{{ product.product_name }}</h3>
+                </a>
+                <p class="text-xs text-gray-400 mt-0.5">{{ product.category.category_name }}</p>
+                <div class="flex items-center justify-between mt-3">
+                    <span class="text-primary font-bold">Rs. {{ product.price }}</span>
+                    {% if product.stock > 0 %}
+                    <a href="{% url 'add_cart' product.id %}" class="bg-primary hover:bg-primary-dark text-white text-xs px-3 py-1.5 rounded-full transition">
+                        <i class="fas fa-plus mr-1"></i>Add
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% elif keyword %}
+    <div class="text-center py-20 text-gray-400">
+        <i class="fas fa-search text-6xl mb-4"></i>
+        <p class="text-xl font-medium">No results for "{{ keyword }}"</p>
+        <p class="text-sm mt-2">Try a different keyword or browse all products.</p>
+        <a href="{% url 'product_list' %}" class="mt-4 inline-block text-primary hover:underline">Browse all products</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

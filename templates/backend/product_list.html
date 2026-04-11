@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Products | Admin{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100">
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-extrabold text-gray-900">Products <span class="text-gray-400 font-normal text-lg">({{ products.count }})</span></h1>
+        <a href="/admin/products/product/add/" class="bg-accent text-primary-dark text-sm font-black px-4 py-2 rounded-full hover:bg-accent-dark transition">
+            <i class="fas fa-plus mr-1"></i>Add Product
+        </a>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead class="bg-gray-50 text-xs uppercase tracking-wide text-gray-500 border-b">
+                    <tr>
+                        <th class="text-left px-5 py-3">Product</th>
+                        <th class="text-left px-4 py-3 hidden md:table-cell">Category</th>
+                        <th class="text-left px-4 py-3">Price</th>
+                        <th class="text-left px-4 py-3 hidden sm:table-cell">Availability</th>
+                        <th class="text-left px-4 py-3 hidden lg:table-cell">Stock</th>
+                        <th class="text-left px-4 py-3">Status</th>
+                        <th class="px-4 py-3">Edit</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for p in products %}
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-5 py-3">
+                            <div class="flex items-center gap-3">
+                                {% if p.images %}<img src="{{ p.images.url }}" class="w-10 h-10 rounded-lg object-cover flex-shrink-0">
+                                {% else %}<div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center"><i class="fas fa-cog text-gray-300 text-sm"></i></div>{% endif %}
+                                <div class="min-w-0"><p class="font-semibold text-gray-800 text-sm truncate max-w-40">{{ p.product_name }}</p>
+                                {% if p.brand %}<p class="text-xs text-gray-400">{{ p.brand }}</p>{% endif %}</div>
+                            </div>
+                        </td>
+                        <td class="px-4 py-3 text-gray-500 hidden md:table-cell">{{ p.category.category_name }}</td>
+                        <td class="px-4 py-3">
+                            {% if p.show_price and p.price %}
+                            <span class="font-bold text-primary text-xs">Rs. {{ p.price }}</span>
+                            {% else %}<span class="text-xs text-gray-400 italic">Hidden</span>{% endif %}
+                        </td>
+                        <td class="px-4 py-3 hidden sm:table-cell">
+                            <span class="text-xs font-bold px-2 py-0.5 rounded-full
+                                {% if p.availability == 'in_stock' %}bg-green-100 text-green-700
+                                {% elif p.availability == 'on_order' %}bg-blue-100 text-blue-700
+                                {% elif p.availability == 'overseas' %}bg-purple-100 text-purple-700
+                                {% else %}bg-red-100 text-red-600{% endif %}">
+                                {{ p.get_availability_display }}
+                            </span>
+                        </td>
+                        <td class="px-4 py-3 hidden lg:table-cell">
+                            <span class="{% if p.stock <= 5 and p.availability == 'in_stock' %}text-red-500 font-bold{% else %}text-gray-600{% endif %}">
+                                {{ p.stock }}
+                            </span>
+                        </td>
+                        <td class="px-4 py-3">
+                            {% if p.is_available %}<span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full">Active</span>
+                            {% else %}<span class="bg-gray-100 text-gray-500 text-xs font-bold px-2 py-0.5 rounded-full">Hidden</span>{% endif %}
+                        </td>
+                        <td class="px-4 py-3">
+                            <a href="/admin/products/product/{{ p.id }}/change/" class="text-primary hover:underline text-xs font-bold">Edit</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Project Gallery — AgroYantra AgriTech{% endblock %}
+{% block content %}
+<div class="bg-primary-dark text-white py-14">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+        <span class="text-accent font-bold text-xs uppercase tracking-widest">Our Work</span>
+        <h1 class="text-4xl font-extrabold mt-3 mb-3">Project Gallery</h1>
+        <p class="text-gray-300">A showcase of completed projects and equipment installed across Nepal.</p>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 py-12">
+    {% if albums %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for album in albums %}
+        <a href="{% url 'gallery_album' album.slug %}" class="group block bg-white rounded-2xl shadow-card hover:shadow-card-hover transition overflow-hidden">
+            {% if album.cover_image %}
+            <div class="h-52 overflow-hidden">
+                <img src="{{ album.cover_image.url }}" alt="{{ album.title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+            </div>
+            {% else %}
+            <div class="h-52 bg-gradient-to-br from-primary-dark to-primary flex items-center justify-center">
+                <i class="fas fa-images text-white/30 text-5xl"></i>
+            </div>
+            {% endif %}
+            <div class="p-5">
+                <h3 class="font-bold text-lg text-gray-900 group-hover:text-primary transition">{{ album.title }}</h3>
+                {% if album.description %}
+                <p class="text-gray-500 text-sm mt-1 line-clamp-2">{{ album.description }}</p>
+                {% endif %}
+                <div class="flex items-center justify-between mt-3">
+                    <span class="text-xs text-gray-400">{{ album.images.filter(is_active=True).count }} photos</span>
+                    <span class="text-primary text-sm font-semibold group-hover:translate-x-1 transition inline-flex items-center gap-1">View <i class="fas fa-arrow-right text-xs"></i></span>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-20 text-gray-400">
+        <i class="fas fa-images text-6xl mb-4"></i>
+        <p class="text-xl font-medium text-gray-600">Gallery coming soon</p>
+        <p class="text-sm mt-2">Our project photos will appear here.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

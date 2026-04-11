@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard | AgroYantra{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100">
+<div class="max-w-7xl mx-auto px-4 py-6 sm:py-8">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-8">
+        <div>
+            <h1 class="text-2xl font-extrabold text-gray-900">Admin Dashboard</h1>
+            <p class="text-gray-500 text-sm mt-0.5">Welcome back, {{ request.user.first_name }}</p>
+        </div>
+        <div class="flex gap-2 flex-wrap">
+            <a href="{% url 'backend_order_list' %}" class="bg-primary text-white text-sm font-bold px-4 py-2 rounded-full hover:bg-primary-dark transition flex items-center gap-2">
+                <i class="fas fa-list"></i> All Orders
+            </a>
+            <a href="/admin/products/product/add/" class="bg-accent text-primary-dark text-sm font-black px-4 py-2 rounded-full hover:bg-accent-dark transition flex items-center gap-2">
+                <i class="fas fa-plus"></i> Add Product
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">Total Orders</span>
+                <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-shopping-bag text-blue-600"></i>
+                </div>
+            </div>
+            <p class="text-3xl font-black text-gray-900">{{ total_orders }}</p>
+        </div>
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">New Orders</span>
+                <div class="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-bell text-orange-500"></i>
+                </div>
+            </div>
+            <p class="text-3xl font-black text-orange-500">{{ new_orders }}</p>
+        </div>
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">Revenue (Delivered)</span>
+                <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-rupee-sign text-green-600"></i>
+                </div>
+            </div>
+            <p class="text-2xl font-black text-green-600">Rs. {{ total_revenue|floatformat:0 }}</p>
+        </div>
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">Products</span>
+                <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-box text-purple-600"></i>
+                </div>
+            </div>
+            <p class="text-3xl font-black text-gray-900">{{ total_products }}</p>
+            {% if low_stock %}<p class="text-xs text-red-500 mt-1"><i class="fas fa-exclamation-triangle mr-1"></i>{{ low_stock }} low stock</p>{% endif %}
+        </div>
+    </div>
+
+    <!-- Quick Nav -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+        <a href="{% url 'backend_order_list' %}" class="bg-primary-dark text-white rounded-xl p-4 flex items-center gap-3 hover:opacity-90 transition group">
+            <i class="fas fa-list text-accent text-xl"></i>
+            <span class="font-bold text-sm">Orders</span>
+        </a>
+        <a href="{% url 'backend_product_list' %}" class="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-3 hover:border-primary transition">
+            <i class="fas fa-box text-primary text-xl"></i>
+            <span class="font-bold text-sm text-gray-800">Products</span>
+        </a>
+        <a href="{% url 'backend_staff_list' %}" class="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-3 hover:border-primary transition">
+            <i class="fas fa-users text-primary text-xl"></i>
+            <span class="font-bold text-sm text-gray-800">Staff</span>
+        </a>
+        <a href="/admin/" class="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-3 hover:border-primary transition">
+            <i class="fas fa-cog text-primary text-xl"></i>
+            <span class="font-bold text-sm text-gray-800">Django Admin</span>
+        </a>
+    </div>
+
+    <!-- Recent Orders -->
+    <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
+        <div class="flex items-center justify-between px-6 py-4 border-b">
+            <h2 class="font-extrabold text-gray-900">Recent Orders</h2>
+            <a href="{% url 'backend_order_list' %}" class="text-sm text-primary hover:underline font-semibold">View all</a>
+        </div>
+        {% if orders %}
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide">
+                    <tr>
+                        <th class="text-left px-5 py-3">Order #</th>
+                        <th class="text-left px-4 py-3 hidden sm:table-cell">Customer</th>
+                        <th class="text-left px-4 py-3 hidden md:table-cell">City</th>
+                        <th class="text-left px-4 py-3">Total</th>
+                        <th class="text-left px-4 py-3 hidden lg:table-cell">Date</th>
+                        <th class="text-left px-4 py-3">Status</th>
+                        <th class="px-4 py-3"></th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for order in orders %}
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-5 py-3 font-mono text-xs text-gray-600">{{ order.order_number }}</td>
+                        <td class="px-4 py-3 font-medium hidden sm:table-cell">{{ order.full_name }}</td>
+                        <td class="px-4 py-3 text-gray-500 hidden md:table-cell">{{ order.city }}</td>
+                        <td class="px-4 py-3 font-bold text-primary">Rs. {{ order.order_total|floatformat:0 }}</td>
+                        <td class="px-4 py-3 text-gray-400 text-xs hidden lg:table-cell">{{ order.created_at|date:"d M Y" }}</td>
+                        <td class="px-4 py-3">
+                            <span class="px-2 py-1 rounded-full text-xs font-bold
+                                {% if order.status == 'New' %}bg-blue-100 text-blue-700
+                                {% elif order.status == 'Confirmed' %}bg-yellow-100 text-yellow-700
+                                {% elif order.status == 'Processing' %}bg-orange-100 text-orange-700
+                                {% elif order.status == 'Dispatched' %}bg-purple-100 text-purple-700
+                                {% elif order.status == 'Delivered' %}bg-green-100 text-green-700
+                                {% else %}bg-red-100 text-red-700{% endif %}">
+                                {{ order.status }}
+                            </span>
+                        </td>
+                        <td class="px-4 py-3">
+                            <a href="{% url 'backend_order_detail' order.order_number %}" class="text-primary hover:underline text-xs font-bold">Manage</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-12 text-gray-400"><i class="fas fa-inbox text-4xl mb-3"></i><p>No orders yet.</p></div>
+        {% endif %}
+    </div>
+</div>
+</div>
+{% endblock %}

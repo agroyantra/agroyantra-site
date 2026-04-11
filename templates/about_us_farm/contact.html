@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact - AgroYantra AgriTech Solutions{% endblock %}
+
+{% block content %}
+<section class="bg-primary-dark text-white py-16">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+        <span class="text-accent font-bold text-xs uppercase tracking-widest">Get in Touch</span>
+        <h1 class="text-4xl font-extrabold mt-3 mb-4">Contact AgroYantra</h1>
+        <p class="text-gray-300">Whether you need equipment, a turnkey project, or consulting — our team is ready.</p>
+    </div>
+</section>
+
+<div class="max-w-5xl mx-auto px-4 py-14">
+    <div class="grid md:grid-cols-2 gap-10">
+        <!-- Contact Info -->
+        <div class="space-y-5">
+            <div class="bg-white rounded-2xl p-6 shadow-sm flex items-start gap-4 border border-gray-100">
+                <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-map-marker-alt text-primary text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-1">Office Address</h3>
+                    <p class="text-gray-500 text-sm">Kathmandu, Bagmati Province, Nepal</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl p-6 shadow-sm flex items-start gap-4 border border-gray-100">
+                <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-phone text-primary text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-1">Phone / WhatsApp</h3>
+                    <p class="text-gray-500 text-sm">+977-9856066112</p>
+                    <p class="text-gray-400 text-xs mt-0.5">Sun–Fri, 9AM–6PM</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl p-6 shadow-sm flex items-start gap-4 border border-gray-100">
+                <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-envelope text-primary text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-1">Email</h3>
+                    <p class="text-gray-500 text-sm">agroyantra@gmail.com</p>
+                    <p class="text-gray-500 text-sm">projects@agroyantra.com.np</p>
+                </div>
+            </div>
+            <!-- What we handle -->
+            <div class="bg-primary-dark rounded-2xl p-6">
+                <h3 class="font-bold text-white mb-3 text-sm uppercase tracking-widest">We Can Help With</h3>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li class="flex items-center gap-2"><i class="fas fa-check text-accent"></i> Equipment purchase enquiries</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-check text-accent"></i> Turnkey project quotes</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-check text-accent"></i> Agriculture consulting</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-check text-accent"></i> Livestock project planning</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-check text-accent"></i> Spare parts & after-sales</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-check text-accent"></i> Government subsidy guidance</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="bg-white rounded-2xl shadow-sm p-8 border border-gray-100">
+            <h2 class="font-extrabold text-xl text-gray-900 mb-6">Send an Enquiry</h2>
+            <form>
+                {% csrf_token %}
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wide">Full Name</label>
+                        <input type="text" placeholder="Ram Sharma" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wide">Phone</label>
+                        <input type="text" placeholder="+977-XXXXXXXXXX" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm">
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wide">Email</label>
+                    <input type="email" placeholder="your@email.com" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wide">Enquiry Type</label>
+                    <select class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm text-gray-700">
+                        <option value="">Select...</option>
+                        <option>Equipment Purchase</option>
+                        <option>Turnkey Project</option>
+                        <option>Agricultural Consulting</option>
+                        <option>Livestock Project</option>
+                        <option>After-Sales / Spare Parts</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wide">Your Message</label>
+                    <textarea rows="5" placeholder="Describe your project or requirement..." class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm resize-none"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-primary hover:bg-primary-dark text-white font-black py-3 rounded-full transition shadow">
+                    <i class="fas fa-paper-plane mr-2"></i>Send Enquiry
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

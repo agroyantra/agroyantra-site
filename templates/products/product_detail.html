@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.get_meta_title }}{% endblock %}
+{% block meta_description %}{{ product.get_meta_description }}{% endblock %}
+{% block meta_keywords %}{{ product.meta_keywords }}{% endblock %}
+{% block og_title %}{{ product.product_name }} | AgroYantra{% endblock %}
+{% block og_description %}{{ product.get_meta_description }}{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<div class="bg-white border-b">
+    <div class="max-w-7xl mx-auto px-4 py-2.5 text-sm text-gray-500 flex items-center gap-2 flex-wrap">
+        <a href="{% url 'home' %}" class="hover:text-primary">Home</a>
+        <i class="fas fa-chevron-right text-xs"></i>
+        <a href="{% url 'product_list' %}" class="hover:text-primary">Products</a>
+        <i class="fas fa-chevron-right text-xs"></i>
+        <a href="{{ product.category.get_url }}" class="hover:text-primary">{{ product.category.category_name }}</a>
+        <i class="fas fa-chevron-right text-xs"></i>
+        <span class="text-gray-700 font-medium truncate max-w-xs">{{ product.product_name }}</span>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 py-8 sm:py-10">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="flex flex-col md:flex-row">
+            <!-- Image -->
+            <div class="md:w-1/2 p-4 sm:p-8 flex items-center justify-center bg-gray-50">
+                {% if product.images %}
+                <img src="{{ product.images.url }}" alt="{{ product.product_name }}"
+                    class="w-full max-h-96 object-contain rounded-xl cursor-pointer hover:opacity-90 transition"
+                    onclick="openLightbox([{src:'{{ product.images.url }}',caption:'{{ product.product_name }}'}],0)">
+                {% else %}
+                <div class="w-full h-80 flex items-center justify-center">
+                    <i class="fas fa-cog text-gray-300 text-8xl"></i>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Details -->
+            <div class="md:w-1/2 p-6 sm:p-8">
+                <!-- Badges -->
+                <div class="flex flex-wrap gap-2 mb-3">
+                    <span class="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-primary">{{ product.category.category_name }}</span>
+                    <span class="text-xs font-bold px-3 py-1 rounded-full
+                        {% if product.availability == 'in_stock' %}bg-green-100 text-green-700
+                        {% elif product.availability == 'on_order' %}bg-blue-100 text-blue-700
+                        {% elif product.availability == 'overseas' %}bg-purple-100 text-purple-700
+                        {% else %}bg-red-100 text-red-700{% endif %}">
+                        {{ product.get_availability_display }}
+                    </span>
+                    {% if product.is_featured %}<span class="text-xs font-bold px-3 py-1 rounded-full bg-accent/20 text-primary">Featured</span>{% endif %}
+                </div>
+
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-2 leading-tight">{{ product.product_name }}</h1>
+                {% if product.brand %}<p class="text-sm text-gray-500 mb-3">Brand: <strong>{{ product.brand }}</strong>{% if product.model_number %} | Model: <strong>{{ product.model_number }}</strong>{% endif %}</p>{% endif %}
+
+                <!-- Price -->
+                <div class="mb-5">
+                    {% if product.show_price and product.price %}
+                        {% if product.discount_price %}
+                        <div class="flex items-end gap-3">
+                            <p class="text-3xl font-black text-primary">Rs. {{ product.discount_price }}</p>
+                            <p class="text-lg text-gray-400 line-through mb-1">Rs. {{ product.price }}</p>
+                        </div>
+                        {% else %}
+                        <p class="text-3xl font-black text-primary">Rs. {{ product.price }}</p>
+                        {% endif %}
+                        <p class="text-xs text-gray-400 mt-1">Per {{ product.unit }} | 13% VAT may apply</p>
+                    {% else %}
+                    <div class="inline-flex items-center gap-2 bg-primary/10 rounded-xl px-4 py-3">
+                        <i class="fas fa-tag text-primary"></i>
+                        <div>
+                            <p class="font-bold text-primary text-sm">Contact Us for Price</p>
+                            <p class="text-xs text-gray-500">Call or email for pricing details</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% if product.short_description %}
+                <p class="text-gray-600 mb-5 text-sm leading-relaxed">{{ product.short_description }}</p>
+                {% endif %}
+
+                <!-- Overseas lead time notice -->
+                {% if product.availability == 'overseas' and product.overseas_lead_time %}
+                <div class="bg-purple-50 border border-purple-100 rounded-xl p-3 mb-5 flex items-start gap-2">
+                    <i class="fas fa-ship text-purple-500 mt-0.5 flex-shrink-0"></i>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800">Import Order</p>
+                        <p class="text-xs text-gray-500">Estimated lead time: <strong>{{ product.overseas_lead_time }}</strong></p>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- COD badge -->
+                <div class="flex items-center gap-3 bg-orange-50 border border-orange-100 rounded-xl p-3 mb-6">
+                    <i class="fas fa-hand-holding-usd text-orange-400 text-xl flex-shrink-0"></i>
+                    <div>
+                        <p class="text-sm font-bold text-gray-800">Cash on Delivery</p>
+                        <p class="text-xs text-gray-500">Pay when your order is delivered. No advance required.</p>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex flex-col xs:flex-row gap-3">
+                    {% if product.is_orderable %}
+                    <a href="{% url 'add_cart' product.id %}"
+                        class="flex-1 inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-white font-black py-3 px-6 rounded-full transition shadow-lg">
+                        <i class="fas fa-cart-plus"></i> Add to Cart
+                    </a>
+                    {% endif %}
+                    <a href="{% url 'contact' %}"
+                        class="flex-1 inline-flex items-center justify-center gap-2 border-2 border-primary text-primary hover:bg-primary hover:text-white font-bold py-3 px-6 rounded-full transition">
+                        <i class="fas fa-phone"></i> Enquire
+                    </a>
+                </div>
+
+                <!-- Min order -->
+                {% if product.min_order_quantity > 1 %}
+                <p class="text-xs text-gray-400 mt-3"><i class="fas fa-info-circle text-primary mr-1"></i>Minimum order: {{ product.min_order_quantity }} {{ product.unit }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Description & Specs tabs -->
+        <div class="border-t border-gray-100 p-6 sm:p-8">
+            <div class="flex gap-4 border-b mb-6" role="tablist">
+                <button class="tab-btn pb-2 text-sm font-bold border-b-2 border-primary text-primary" onclick="showTab('desc',this)" role="tab">Description</button>
+                {% if product.specifications %}
+                <button class="tab-btn pb-2 text-sm font-bold text-gray-400 hover:text-primary" onclick="showTab('specs',this)" role="tab">Specifications</button>
+                {% endif %}
+            </div>
+            <div id="tab-desc" class="tab-panel text-gray-600 text-sm leading-relaxed">
+                {{ product.description|linebreaksbr }}
+            </div>
+            {% if product.specifications %}
+            <div id="tab-specs" class="tab-panel hidden">
+                <table class="w-full text-sm border-collapse">
+                    {% for line in product.specifications.splitlines %}
+                    {% if line %}
+                    <tr class="border-b border-gray-100">
+                        {% if ':' in line %}
+                        <td class="py-2 pr-4 font-semibold text-gray-700 w-1/3">{{ line|slice:":"|add:"" }}{% with parts=line.split(':') %}{{ parts.0 }}{% endwith %}</td>
+                        <td class="py-2 text-gray-600">{% with parts=line.split(':') %}{{ parts.1 }}{% endwith %}</td>
+                        {% else %}
+                        <td colspan="2" class="py-2 text-gray-600">{{ line }}</td>
+                        {% endif %}
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </table>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Related Products -->
+    {% if related_products %}
+    <div class="mt-12">
+        <h2 class="text-xl font-extrabold text-gray-900 mb-6">Related Products</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            {% for rp in related_products %}
+            <a href="{{ rp.get_url }}" class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition group">
+                {% if rp.images %}
+                <img src="{{ rp.images.url }}" alt="{{ rp.product_name }}" class="w-full h-36 object-cover rounded-t-xl group-hover:opacity-90 transition">
+                {% else %}
+                <div class="w-full h-36 bg-gray-100 rounded-t-xl flex items-center justify-center"><i class="fas fa-cog text-gray-300 text-3xl"></i></div>
+                {% endif %}
+                <div class="p-3">
+                    <p class="text-xs font-bold text-gray-800 truncate hover:text-primary">{{ rp.product_name }}</p>
+                    {% if rp.show_price and rp.price %}
+                    <p class="text-primary font-black text-xs mt-1">Rs. {{ rp.effective_price }}</p>
+                    {% else %}
+                    <p class="text-xs text-primary mt-1">Contact for price</p>
+                    {% endif %}
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% block extra_js %}
+<script>
+function showTab(id, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+    document.getElementById('tab-'+id).classList.remove('hidden');
+    document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('border-b-2','border-primary','text-primary');
+        b.classList.add('text-gray-400');
+    });
+    btn.classList.add('border-b-2','border-primary','text-primary');
+    btn.classList.remove('text-gray-400');
+}
+</script>
+{% endblock %}
+{% endblock %}

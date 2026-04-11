@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+{% block title %}Order #{{ order.order_number }} | Admin{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100">
+<div class="max-w-6xl mx-auto px-4 py-6 sm:py-8">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+        <div class="flex items-center gap-3">
+            <a href="{% url 'backend_order_list' %}" class="text-primary hover:underline text-sm font-semibold">
+                <i class="fas fa-arrow-left mr-1"></i>Orders
+            </a>
+            <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
+            <span class="text-sm text-gray-600">#{{ order.order_number }}</span>
+        </div>
+        <a href="{% url 'delivery_document' order.order_number %}" target="_blank"
+            class="inline-flex items-center gap-2 bg-primary-dark text-white font-bold px-4 py-2 rounded-full hover:opacity-90 transition text-sm">
+            <i class="fas fa-print"></i> Print Delivery Document
+        </a>
+    </div>
+
+    <div class="grid lg:grid-cols-3 gap-6">
+        <!-- Left: Items + delivery -->
+        <div class="lg:col-span-2 space-y-5">
+            <!-- Items -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="px-6 py-4 border-b bg-gray-50 flex items-center gap-2">
+                    <i class="fas fa-box-open text-primary"></i>
+                    <h2 class="font-bold text-gray-900">Items Ordered</h2>
+                </div>
+                <div class="divide-y">
+                    {% for item in order_items %}
+                    <div class="px-6 py-4 flex items-center gap-4">
+                        {% if item.product.images %}
+                        <img src="{{ item.product.images.url }}" class="w-14 h-14 rounded-xl object-cover flex-shrink-0">
+                        {% else %}
+                        <div class="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0"><i class="fas fa-cog text-gray-300 text-xl"></i></div>
+                        {% endif %}
+                        <div class="flex-1 min-w-0">
+                            <p class="font-semibold text-gray-800 text-sm truncate">{{ item.product.product_name }}</p>
+                            <p class="text-gray-400 text-xs">Qty: {{ item.quantity }} &times; Rs. {{ item.product_price }}</p>
+                        </div>
+                        <p class="font-bold text-primary flex-shrink-0">Rs. {{ item.line_total }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="px-6 py-4 bg-gray-50 border-t space-y-2 text-sm">
+                    <div class="flex justify-between text-gray-500"><span>Subtotal</span><span>Rs. {{ subtotal|floatformat:2 }}</span></div>
+                    {% if order.tax > 0 %}<div class="flex justify-between text-gray-500"><span>VAT</span><span>Rs. {{ order.tax|floatformat:2 }}</span></div>{% endif %}
+                    {% if order.delivery_charge > 0 %}<div class="flex justify-between text-gray-500"><span>Delivery</span><span>Rs. {{ order.delivery_charge|floatformat:2 }}</span></div>{% endif %}
+                    <div class="flex justify-between font-black text-gray-900 text-base border-t pt-2">
+                        <span>Total (COD)</span>
+                        <span class="text-primary">Rs. {{ order.order_total|floatformat:2 }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delivery Details Form -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="px-6 py-4 border-b bg-gray-50 flex items-center gap-2">
+                    <i class="fas fa-truck text-primary"></i>
+                    <h2 class="font-bold text-gray-900">Delivery Details</h2>
+                </div>
+                <form method="POST" class="p-6">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="update_delivery">
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wide">Vehicle Number</label>
+                            <input type="text" name="vehicle_number" value="{{ order.vehicle_number }}" placeholder="Ba 1 Cha 1234"
+                                class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wide">Driver Name</label>
+                            <input type="text" name="driver_name" value="{{ order.driver_name }}" placeholder="Driver full name"
+                                class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wide">Driver Phone</label>
+                            <input type="text" name="driver_phone" value="{{ order.driver_phone }}" placeholder="+977-XXXXXXXXXX"
+                                class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wide">Assign Staff</label>
+                            <select name="assigned_to" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+                                <option value="">-- Select Staff --</option>
+                                {% for s in staff_list %}
+                                <option value="{{ s.id }}" {% if order.assigned_to_id == s.id %}selected{% endif %}>{{ s.full_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wide">Delivery Note</label>
+                            <textarea name="delivery_note" rows="2" placeholder="Internal delivery instructions..."
+                                class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none">{{ order.delivery_note }}</textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="mt-4 bg-primary-dark text-white font-bold px-6 py-2.5 rounded-full hover:opacity-90 transition text-sm">
+                        <i class="fas fa-save mr-2"></i>Save Delivery Details
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right: Status + Customer -->
+        <div class="space-y-5">
+            <!-- Status -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <h2 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fas fa-flag text-primary"></i>Order Status</h2>
+                <div class="mb-4">
+                    <span class="px-4 py-2 rounded-full text-sm font-black
+                        {% if order.status == 'New' %}bg-blue-100 text-blue-700
+                        {% elif order.status == 'Confirmed' %}bg-yellow-100 text-yellow-700
+                        {% elif order.status == 'Processing' %}bg-orange-100 text-orange-700
+                        {% elif order.status == 'Dispatched' %}bg-purple-100 text-purple-700
+                        {% elif order.status == 'Delivered' %}bg-green-100 text-green-700
+                        {% else %}bg-red-100 text-red-700{% endif %}">
+                        {{ order.status }}
+                    </span>
+                </div>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="update_status">
+                    <select name="status" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary mb-3">
+                        {% for val, label in status_choices %}
+                        <option value="{{ val }}" {% if order.status == val %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-2.5 rounded-full transition text-sm">
+                        <i class="fas fa-sync mr-2"></i>Update Status
+                    </button>
+                </form>
+                <!-- Timeline -->
+                <div class="mt-5 pt-4 border-t space-y-2 text-xs text-gray-500">
+                    {% if order.created_at %}<p class="flex justify-between"><span><i class="fas fa-plus text-blue-400 mr-1"></i>Created</span><span>{{ order.created_at|date:"d M Y" }}</span></p>{% endif %}
+                    {% if order.dispatch_date %}<p class="flex justify-between"><span><i class="fas fa-truck text-purple-400 mr-1"></i>Dispatched</span><span>{{ order.dispatch_date|date:"d M Y" }}</span></p>{% endif %}
+                    {% if order.delivery_date %}<p class="flex justify-between"><span><i class="fas fa-check text-green-500 mr-1"></i>Delivered</span><span>{{ order.delivery_date|date:"d M Y" }}</span></p>{% endif %}
+                </div>
+            </div>
+
+            <!-- Customer -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <h2 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fas fa-user text-primary"></i>Customer</h2>
+                <div class="text-sm space-y-1.5 text-gray-600">
+                    <p class="font-bold text-gray-900">{{ order.full_name }}</p>
+                    <p><i class="fas fa-phone text-primary w-4 mr-1"></i><a href="tel:{{ order.phone }}" class="hover:text-primary">{{ order.phone }}</a></p>
+                    <p><i class="fas fa-envelope text-primary w-4 mr-1"></i><a href="mailto:{{ order.email }}" class="hover:text-primary text-xs break-all">{{ order.email }}</a></p>
+                    <div class="border-t pt-2 mt-2">
+                        <p class="font-semibold text-gray-700 mb-1"><i class="fas fa-map-marker-alt text-primary w-4 mr-1"></i>Delivery Address</p>
+                        <p>{{ order.address_line_1 }}{% if order.address_line_2 %}, {{ order.address_line_2 }}{% endif %}</p>
+                        <p>{{ order.city }}, {{ order.state }}</p>
+                        <p>{{ order.country }}</p>
+                    </div>
+                    {% if order.order_note %}
+                    <div class="bg-yellow-50 border border-yellow-100 rounded-lg p-3 mt-2">
+                        <p class="text-xs font-bold text-yellow-700 mb-1">Customer Note:</p>
+                        <p class="text-xs text-gray-600">{{ order.order_note }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Payment -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <h2 class="font-bold text-gray-900 mb-3 flex items-center gap-2"><i class="fas fa-receipt text-primary"></i>Payment</h2>
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between"><span class="text-gray-500">Method</span><span class="bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full text-xs font-bold">COD</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">Amount Due</span><span class="font-black text-primary">Rs. {{ order.order_total|floatformat:2 }}</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">Payment Status</span>
+                        <span class="font-semibold {% if order.status == 'Delivered' %}text-green-600{% else %}text-yellow-600{% endif %}">
+                            {% if order.status == 'Delivered' %}Collected{% else %}Pending Collection{% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

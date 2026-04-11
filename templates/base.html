@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    {% block seo %}
+    <title>{% block title %}AgroYantra - AgriTech Solutions Nepal{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}AgroYantra supplies modern agri equipment, executes turnkey agriculture projects, and provides expert consulting for farming and livestock ventures in Nepal.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}agritech nepal, agriculture equipment nepal, greenhouse nepal, poultry equipment, irrigation system, agri consulting{% endblock %}">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="AgroYantra AgriTech Solutions">
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="AgroYantra">
+    <meta property="og:title" content="{% block og_title %}AgroYantra - AgriTech Solutions Nepal{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Modern agri equipment, turnkey projects & consulting for Nepal's farming sector.{% endblock %}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% load static %}{% static 'images/logo.jpeg' %}">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AgroYantra AgriTech Solutions">
+    <meta name="twitter:description" content="Modern agri equipment, turnkey projects & consulting.">
+    {% endblock %}
+    {% load static %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1a6b2f',
+                        'primary-dark': '#0d4a1f',
+                        'primary-light': '#2d9e4f',
+                        accent: '#a3d900',
+                        'accent-dark': '#7aab00',
+                    },
+                    screens: {
+                        'xs': '400px',
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <style>
+        /* Toast */
+        .toast-container{position:fixed;top:1rem;right:1rem;z-index:9999;max-width:calc(100vw - 2rem)}
+        .toast{animation:slideIn .3s ease,fadeOut .5s ease 3.5s forwards}
+        @keyframes slideIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
+        @keyframes fadeOut{to{opacity:0;pointer-events:none}}
+        /* Logo */
+        .logo-glow{filter:drop-shadow(0 0 6px rgba(163,217,0,.5))}
+        /* Lightbox */
+        .lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:10000;align-items:center;justify-content:center}
+        .lightbox.open{display:flex}
+        /* Mobile nav transition */
+        #mobile-menu{transition:max-height .3s ease,opacity .3s ease;max-height:0;opacity:0;overflow:hidden}
+        #mobile-menu.open{max-height:600px;opacity:1}
+        /* Smooth scroll */
+        html{scroll-behavior:smooth}
+        /* Print styles */
+        @media print{nav,footer,.no-print{display:none!important}.print-only{display:block!important}}
+        .print-only{display:none}
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-gray-50 font-sans text-gray-800 antialiased">
+
+    <!-- Toast Notifications -->
+    {% if messages %}
+    <div class="toast-container">
+        {% for message in messages %}
+        <div class="toast mb-2 flex items-center gap-3 px-4 py-3 rounded-xl shadow-2xl text-white text-sm font-medium
+            {% if message.tags == 'success' %}bg-green-600{% elif message.tags == 'danger' or message.tags == 'error' %}bg-red-500{% elif message.tags == 'warning' %}bg-yellow-500{% else %}bg-blue-500{% endif %}">
+            <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'danger' or message.tags == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %} flex-shrink-0"></i>
+            <span>{{ message }}</span>
+            <button onclick="this.parentElement.remove()" class="ml-auto opacity-70 hover:opacity-100"><i class="fas fa-times text-xs"></i></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Top Bar -->
+    <div class="hidden md:block bg-primary-dark border-b border-white/10 text-xs text-gray-400">
+        <div class="max-w-7xl mx-auto px-4 flex justify-between items-center h-8">
+            <div class="flex items-center gap-4">
+                <span class="flex items-center gap-1.5"><i class="fas fa-phone text-accent"></i> +977-9856066112</span>
+                <span class="flex items-center gap-1.5"><i class="fas fa-envelope text-accent"></i> agroyantra@gmail.com</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="flex items-center gap-1.5"><i class="fas fa-clock text-accent"></i> Sun–Fri: 9AM–6PM</span>
+                <a href="{% url 'gallery' %}" class="hover:text-accent transition">Gallery</a>
+                <a href="{% url 'contact' %}" class="hover:text-accent transition">Contact</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navbar -->
+    <nav class="bg-primary-dark shadow-2xl sticky top-0 z-50" role="navigation" aria-label="Main navigation">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <a href="{% url 'home' %}" class="flex items-center gap-3 flex-shrink-0" aria-label="AgroYantra Home">
+                    <svg class="logo-glow w-9 h-9" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M50 5 L93 78 L7 78 Z" fill="none" stroke="#a3d900" stroke-width="6" stroke-linejoin="round"/>
+                        <path d="M50 95 L7 22 L93 22 Z" fill="none" stroke="#2d9e4f" stroke-width="6" stroke-linejoin="round"/>
+                    </svg>
+                    <div class="leading-tight">
+                        <p class="text-white font-black text-base sm:text-lg tracking-wide leading-none">AGRO<span class="text-accent">YANTRA</span></p>
+                        <p class="text-green-400 text-xs font-medium tracking-widest leading-tight hidden xs:block">AGRITECH SOLUTIONS</p>
+                    </div>
+                </a>
+
+                <!-- Desktop Search -->
+                <form action="{% url 'search' %}" method="GET" class="hidden lg:flex items-center bg-white/10 border border-white/20 rounded-full overflow-hidden w-64 xl:w-80 focus-within:border-accent transition" role="search">
+                    <input type="text" name="keyword" placeholder="Search products..." value="{{ request.GET.keyword }}" aria-label="Search products"
+                        class="flex-1 px-4 py-2 text-sm text-white placeholder-green-300/70 bg-transparent outline-none min-w-0">
+                    <button type="submit" class="bg-accent hover:bg-accent-dark text-primary-dark px-4 py-2 font-bold transition flex-shrink-0" aria-label="Search">
+                        <i class="fas fa-search text-sm"></i>
+                    </button>
+                </form>
+
+                <!-- Desktop Nav -->
+                <div class="hidden md:flex items-center gap-1">
+                    <a href="{% url 'product_list' %}" class="text-green-200 hover:text-accent hover:bg-white/5 text-sm font-medium px-3 py-2 rounded-lg transition">Products</a>
+                    <!-- Services dropdown -->
+                    <div class="relative group">
+                        <button class="text-green-200 hover:text-accent hover:bg-white/5 text-sm font-medium px-3 py-2 rounded-lg transition flex items-center gap-1">
+                            Services <i class="fas fa-chevron-down text-xs mt-0.5"></i>
+                        </button>
+                        <div class="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-2xl py-2 hidden group-hover:block border border-gray-100">
+                            <a href="{% url 'about_us' %}#equipment" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary"><i class="fas fa-tractor w-5 text-primary mr-2"></i>Equipment Supply</a>
+                            <a href="{% url 'our_farm' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary"><i class="fas fa-project-diagram w-5 text-primary mr-2"></i>Turnkey Projects</a>
+                            <a href="{% url 'about_us' %}#consulting" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary"><i class="fas fa-chart-line w-5 text-primary mr-2"></i>Consulting</a>
+                        </div>
+                    </div>
+                    <a href="{% url 'gallery' %}" class="text-green-200 hover:text-accent hover:bg-white/5 text-sm font-medium px-3 py-2 rounded-lg transition">Gallery</a>
+                    <a href="{% url 'about_us' %}" class="text-green-200 hover:text-accent hover:bg-white/5 text-sm font-medium px-3 py-2 rounded-lg transition">About</a>
+                </div>
+
+                <!-- Right actions -->
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <!-- Cart -->
+                    <a href="{% url 'cart' %}" class="relative text-green-200 hover:text-accent transition p-2" aria-label="Shopping cart">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        {% if cart_count > 0 %}
+                        <span class="absolute -top-1 -right-1 bg-accent text-primary-dark text-xs rounded-full w-5 h-5 flex items-center justify-center font-black leading-none">{{ cart_count }}</span>
+                        {% endif %}
+                    </a>
+
+                    {% if request.user.is_authenticated %}
+                    <div class="relative group">
+                        <button class="flex items-center gap-1.5 text-green-200 hover:text-accent text-sm font-medium p-2 rounded-lg hover:bg-white/5 transition" aria-haspopup="true">
+                            <i class="fas fa-user-circle text-xl"></i>
+                            <span class="hidden sm:block max-w-20 truncate">{{ request.user.first_name }}</span>
+                            <i class="fas fa-chevron-down text-xs hidden sm:block"></i>
+                        </button>
+                        <div class="absolute right-0 mt-1 w-52 bg-white rounded-xl shadow-2xl py-2 hidden group-hover:block border border-gray-100" role="menu">
+                            <div class="px-4 py-2 border-b border-gray-100 mb-1">
+                                <p class="text-xs font-bold text-gray-900 truncate">{{ request.user.full_name }}</p>
+                                <p class="text-xs text-gray-400 truncate">{{ request.user.email }}</p>
+                            </div>
+                            <a href="{% url 'dashboard' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" role="menuitem"><i class="fas fa-tachometer-alt w-5 text-primary mr-2"></i>Dashboard</a>
+                            <a href="{% url 'my_orders' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" role="menuitem"><i class="fas fa-file-alt w-5 text-primary mr-2"></i>My Orders</a>
+                            <a href="{% url 'edit_profile' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" role="menuitem"><i class="fas fa-user-edit w-5 text-primary mr-2"></i>Edit Profile</a>
+                            {% if request.user.is_staff or request.user.is_admin %}
+                            <hr class="my-1">
+                            <a href="{% url 'backend_dashboard' %}" class="block px-4 py-2 text-sm text-primary font-bold hover:bg-gray-50" role="menuitem"><i class="fas fa-cog w-5 mr-2"></i>Admin Panel</a>
+                            {% endif %}
+                            <hr class="my-1">
+                            <a href="{% url 'logout' %}" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50" role="menuitem"><i class="fas fa-sign-out-alt w-5 mr-2"></i>Logout</a>
+                        </div>
+                    </div>
+                    {% else %}
+                    <a href="{% url 'login' %}" class="hidden sm:block text-green-200 hover:text-accent text-sm font-medium px-3 py-2 transition">Login</a>
+                    <a href="{% url 'register' %}" class="bg-accent hover:bg-accent-dark text-primary-dark text-sm font-black px-3 sm:px-4 py-2 rounded-full transition shadow whitespace-nowrap">Get Started</a>
+                    {% endif %}
+
+                    <!-- Mobile hamburger -->
+                    <button id="mobile-menu-btn" class="md:hidden text-white p-2 rounded-lg hover:bg-white/10 transition" aria-label="Toggle menu" aria-expanded="false">
+                        <i class="fas fa-bars text-xl" id="hamburger-icon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" role="navigation" aria-label="Mobile navigation">
+                <div class="pb-4 pt-2 border-t border-white/10 space-y-1">
+                    <!-- Mobile search -->
+                    <form action="{% url 'search' %}" method="GET" class="flex items-center bg-white/10 rounded-full overflow-hidden mb-3" role="search">
+                        <input type="text" name="keyword" placeholder="Search products..." class="flex-1 px-4 py-2.5 text-sm text-white bg-transparent outline-none" aria-label="Search">
+                        <button type="submit" class="bg-accent text-primary-dark px-4 py-2.5 flex-shrink-0"><i class="fas fa-search text-sm"></i></button>
+                    </form>
+                    <a href="{% url 'product_list' %}" class="flex items-center gap-3 text-green-200 py-2.5 px-3 rounded-lg hover:bg-white/10 transition"><i class="fas fa-th-large w-5 text-accent"></i>Products</a>
+                    <a href="{% url 'our_farm' %}" class="flex items-center gap-3 text-green-200 py-2.5 px-3 rounded-lg hover:bg-white/10 transition"><i class="fas fa-project-diagram w-5 text-accent"></i>Turnkey Projects</a>
+                    <a href="{% url 'gallery' %}" class="flex items-center gap-3 text-green-200 py-2.5 px-3 rounded-lg hover:bg-white/10 transition"><i class="fas fa-images w-5 text-accent"></i>Gallery</a>
+                    <a href="{% url 'about_us' %}" class="flex items-center gap-3 text-green-200 py-2.5 px-3 rounded-lg hover:bg-white/10 transition"><i class="fas fa-info-circle w-5 text-accent"></i>About Us</a>
+                    <a href="{% url 'contact' %}" class="flex items-center gap-3 text-green-200 py-2.5 px-3 rounded-lg hover:bg-white/10 transition"><i class="fas fa-phone w-5 text-accent"></i>Contact</a>
+                    {% if not request.user.is_authenticated %}
+                    <div class="flex gap-2 pt-2">
+                        <a href="{% url 'login' %}" class="flex-1 text-center border border-white/30 text-white py-2.5 rounded-full text-sm font-bold hover:bg-white/10 transition">Login</a>
+                        <a href="{% url 'register' %}" class="flex-1 text-center bg-accent text-primary-dark py-2.5 rounded-full text-sm font-black hover:bg-accent-dark transition">Get Started</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main-content">{% block content %}{% endblock %}</main>
+
+    <!-- Footer -->
+    <footer class="bg-primary-dark text-gray-300 mt-16" role="contentinfo">
+        <div class="max-w-7xl mx-auto px-4 py-12 sm:py-16">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="sm:col-span-2 lg:col-span-2">
+                    <a href="{% url 'home' %}" class="flex items-center gap-3 mb-4">
+                        <svg class="logo-glow w-8 h-8 flex-shrink-0" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M50 5 L93 78 L7 78 Z" fill="none" stroke="#a3d900" stroke-width="6" stroke-linejoin="round"/>
+                            <path d="M50 95 L7 22 L93 22 Z" fill="none" stroke="#2d9e4f" stroke-width="6" stroke-linejoin="round"/>
+                        </svg>
+                        <div>
+                            <p class="text-white font-black text-lg">AGRO<span class="text-accent">YANTRA</span></p>
+                            <p class="text-green-400 text-xs tracking-widest">AGRITECH SOLUTIONS</p>
+                        </div>
+                    </a>
+                    <p class="text-sm leading-relaxed mb-5 text-gray-400 max-w-sm">Nepal's trusted AgriTech company — supplying modern agricultural equipment, executing turnkey agri-infrastructure projects, and delivering expert consulting for agriculture and livestock ventures.</p>
+                    <div class="flex gap-2">
+                        <a href="#" class="w-9 h-9 bg-white/10 hover:bg-accent/20 rounded-full flex items-center justify-center transition" aria-label="Facebook"><i class="fab fa-facebook-f text-accent"></i></a>
+                        <a href="#" class="w-9 h-9 bg-white/10 hover:bg-accent/20 rounded-full flex items-center justify-center transition" aria-label="Instagram"><i class="fab fa-instagram text-accent"></i></a>
+                        <a href="#" class="w-9 h-9 bg-white/10 hover:bg-accent/20 rounded-full flex items-center justify-center transition" aria-label="LinkedIn"><i class="fab fa-linkedin-in text-accent"></i></a>
+                        <a href="#" class="w-9 h-9 bg-white/10 hover:bg-accent/20 rounded-full flex items-center justify-center transition" aria-label="YouTube"><i class="fab fa-youtube text-accent"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-white font-bold mb-4 uppercase text-xs tracking-widest">Quick Links</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="{% url 'product_list' %}" class="hover:text-accent transition flex items-center gap-2"><i class="fas fa-chevron-right text-xs text-accent"></i>Equipment</a></li>
+                        <li><a href="{% url 'our_farm' %}" class="hover:text-accent transition flex items-center gap-2"><i class="fas fa-chevron-right text-xs text-accent"></i>Turnkey Projects</a></li>
+                        <li><a href="{% url 'about_us' %}" class="hover:text-accent transition flex items-center gap-2"><i class="fas fa-chevron-right text-xs text-accent"></i>About Us</a></li>
+                        <li><a href="{% url 'gallery' %}" class="hover:text-accent transition flex items-center gap-2"><i class="fas fa-chevron-right text-xs text-accent"></i>Gallery</a></li>
+                        <li><a href="{% url 'contact' %}" class="hover:text-accent transition flex items-center gap-2"><i class="fas fa-chevron-right text-xs text-accent"></i>Contact</a></li>
+                        <li><a href="{% url 'my_orders' %}" class="hover:text-accent transition flex items-center gap-2"><i class="fas fa-chevron-right text-xs text-accent"></i>Track Order</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-bold mb-4 uppercase text-xs tracking-widest">Contact Us</h3>
+                    <address class="not-italic space-y-2 text-sm">
+                        <p class="flex items-start gap-2"><i class="fas fa-map-marker-alt mt-1 text-accent flex-shrink-0"></i><span>Kathmandu, Nepal</span></p>
+                        <p class="flex items-start gap-2"><i class="fas fa-phone mt-1 text-accent flex-shrink-0"></i><a href="tel:+9779856066112" class="hover:text-accent">+977-9856066112</a></p>
+                        <p class="flex items-start gap-2"><i class="fas fa-envelope mt-1 text-accent flex-shrink-0"></i><a href="mailto:agroyantra@gmail.com" class="hover:text-accent">agroyantra@gmail.com</a></p>
+                        <p class="flex items-start gap-2"><i class="fas fa-clock mt-1 text-accent flex-shrink-0"></i>Sun–Fri: 9AM–6PM</p>
+                    </address>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-white/10 py-4 text-center text-xs text-gray-500">
+            &copy; {% now "Y" %} Nepal Agro Yantra AgriTech Solutions Pvt. Ltd. All rights reserved. | Payment: <span class="text-accent font-medium">Cash before Delivery</span>
+        </div>
+    </footer>
+
+    <button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top"
+        class="fixed bottom-6 right-4 sm:right-6 bg-primary text-white w-10 h-10 rounded-full shadow-xl hidden items-center justify-center hover:bg-primary-dark transition z-40 border-2 border-accent/30">
+        <i class="fas fa-arrow-up text-sm"></i>
+    </button>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+        <button class="absolute top-4 right-4 text-white text-3xl hover:text-accent z-10" onclick="closeLightbox()" aria-label="Close"><i class="fas fa-times"></i></button>
+        <button class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-3xl hover:text-accent z-10" onclick="lbPrev()" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+        <button class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-3xl hover:text-accent z-10" onclick="lbNext()" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
+        <img id="lightbox-img" src="" alt="" class="max-w-[90vw] max-h-[85vh] rounded-lg shadow-2xl object-contain">
+        <p id="lightbox-caption" class="absolute bottom-4 text-white text-sm text-center w-full px-8"></p>
+    </div>
+
+    <script>
+    // Mobile menu
+    const btn = document.getElementById('mobile-menu-btn');
+    const menu = document.getElementById('mobile-menu');
+    const icon = document.getElementById('hamburger-icon');
+    btn.addEventListener('click', () => {
+        const isOpen = menu.classList.contains('open');
+        menu.classList.toggle('open');
+        icon.className = isOpen ? 'fas fa-bars text-xl' : 'fas fa-times text-xl';
+        btn.setAttribute('aria-expanded', !isOpen);
+    });
+    // Close menu on outside click
+    document.addEventListener('click', e => {
+        if (!btn.contains(e.target) && !menu.contains(e.target)) {
+            menu.classList.remove('open');
+            icon.className = 'fas fa-bars text-xl';
+        }
+    });
+
+    // Back to top
+    const topBtn = document.getElementById('back-to-top');
+    window.addEventListener('scroll', () => {
+        topBtn.classList.toggle('hidden', window.scrollY < 400);
+        topBtn.classList.toggle('flex', window.scrollY >= 400);
+    });
+
+    // Lightbox
+    let lbImages = [], lbIdx = 0;
+    function openLightbox(imgs, idx) {
+        lbImages = imgs; lbIdx = idx;
+        const lb = document.getElementById('lightbox');
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        lbShow();
+    }
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    function lbShow() {
+        document.getElementById('lightbox-img').src = lbImages[lbIdx].src;
+        document.getElementById('lightbox-img').alt = lbImages[lbIdx].caption || '';
+        document.getElementById('lightbox-caption').textContent = lbImages[lbIdx].caption || '';
+    }
+    function lbNext() { lbIdx = (lbIdx + 1) % lbImages.length; lbShow(); }
+    function lbPrev() { lbIdx = (lbIdx - 1 + lbImages.length) % lbImages.length; lbShow(); }
+    document.addEventListener('keydown', e => {
+        if (!document.getElementById('lightbox').classList.contains('open')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowRight') lbNext();
+        if (e.key === 'ArrowLeft') lbPrev();
+    });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

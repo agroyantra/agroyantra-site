@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}{{ album.title }} | Gallery | AgroYantra{% endblock %}
+
+{% block content %}
+<div class="bg-white border-b">
+    <div class="max-w-7xl mx-auto px-4 py-2.5 text-sm text-gray-500 flex items-center gap-2">
+        <a href="{% url 'home' %}" class="hover:text-primary">Home</a>
+        <i class="fas fa-chevron-right text-xs"></i>
+        <a href="{% url 'gallery' %}" class="hover:text-primary">Gallery</a>
+        <i class="fas fa-chevron-right text-xs"></i>
+        <span class="text-gray-800 font-medium">{{ album.title }}</span>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 py-10">
+    <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-2">{{ album.title }}</h1>
+    {% if album.description %}<p class="text-gray-500 mb-8">{{ album.description }}</p>{% endif %}
+
+    {% if images %}
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
+        {% for img in images %}
+        <div class="group relative overflow-hidden rounded-xl aspect-square bg-gray-100 cursor-pointer shadow-sm hover:shadow-lg transition"
+             onclick="openLightbox(allImgs, {{ forloop.counter0 }})">
+            <img src="{{ img.image.url }}" alt="{{ img.title|default:album.title }}" loading="lazy"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+            {% if img.caption or img.title %}
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition flex items-end p-3">
+                <p class="text-white text-xs font-medium">{{ img.caption|default:img.title }}</p>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    <script>
+    const allImgs = [{% for img in images %}{src:'{{ img.image.url }}',caption:'{{ img.caption|default:img.title|escapejs }}'}{% if not forloop.last %},{% endif %}{% endfor %}];
+    </script>
+    {% else %}
+    <div class="text-center py-20 text-gray-400">
+        <i class="fas fa-images text-5xl mb-4"></i>
+        <p>No images in this album yet.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Staff Management | Admin{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100">
+<div class="max-w-5xl mx-auto px-4 py-8">
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-extrabold text-gray-900">Staff Members</h1>
+        <a href="/admin/accounts/account/add/" class="bg-primary text-white text-sm font-bold px-4 py-2 rounded-full hover:bg-primary-dark transition">
+            <i class="fas fa-plus mr-1"></i>Add Staff
+        </a>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        {% if staff %}
+        <table class="w-full text-sm">
+            <thead class="bg-gray-50 text-xs uppercase tracking-wide text-gray-500 border-b">
+                <tr>
+                    <th class="text-left px-6 py-3">Name</th>
+                    <th class="text-left px-4 py-3">Email</th>
+                    <th class="text-left px-4 py-3 hidden md:table-cell">Phone</th>
+                    <th class="text-left px-4 py-3">Role</th>
+                    <th class="text-left px-4 py-3 hidden lg:table-cell">Joined</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                {% for s in staff %}
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-3 font-semibold">{{ s.full_name }}</td>
+                    <td class="px-4 py-3 text-gray-500 text-xs">{{ s.email }}</td>
+                    <td class="px-4 py-3 text-gray-500 hidden md:table-cell">{{ s.phone_number }}</td>
+                    <td class="px-4 py-3">
+                        <span class="bg-primary/10 text-primary text-xs font-bold px-2 py-0.5 rounded-full">
+                            {% if s.is_admin %}Admin{% elif s.is_staff %}Staff{% else %}{{ s.role }}{% endif %}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 text-gray-400 text-xs hidden lg:table-cell">{{ s.date_joined|date:"d M Y" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="text-center py-16 text-gray-400"><p>No staff members found.</p></div>
+        {% endif %}
+    </div>
+</div>
+</div>
+{% endblock %}

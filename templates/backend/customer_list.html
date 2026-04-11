@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Customers — Admin{% endblock %}
+{% block content %}
+<div class="bg-primary-dark text-white py-6">
+    <div class="max-w-7xl mx-auto px-4 flex items-center justify-between">
+        <div>
+            <a href="{% url 'backend_dashboard' %}" class="text-green-300 hover:text-white text-sm transition"><i class="fas fa-arrow-left mr-1"></i>Dashboard</a>
+            <h1 class="text-2xl font-extrabold mt-1">Customers</h1>
+        </div>
+    </div>
+</div>
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="bg-white rounded-2xl shadow-card overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead class="bg-gray-50 border-b border-gray-100 text-xs text-gray-500 uppercase tracking-wide">
+                    <tr>
+                        <th class="text-left px-6 py-3 font-bold">Name</th>
+                        <th class="text-left px-4 py-3 font-bold">Email</th>
+                        <th class="text-left px-4 py-3 font-bold hidden md:table-cell">Phone</th>
+                        <th class="text-left px-4 py-3 font-bold hidden lg:table-cell">Joined</th>
+                        <th class="text-left px-4 py-3 font-bold">Active</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-50">
+                    {% for c in customers %}
+                    <tr class="hover:bg-gray-50/50 transition">
+                        <td class="px-6 py-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center text-primary font-black text-xs flex-shrink-0">{{ c.first_name|first|upper }}</div>
+                                <span class="font-semibold text-gray-800">{{ c.first_name }} {{ c.last_name }}</span>
+                            </div>
+                        </td>
+                        <td class="px-4 py-3 text-gray-500">{{ c.email }}</td>
+                        <td class="px-4 py-3 text-gray-500 hidden md:table-cell">{{ c.phone_number|default:"—" }}</td>
+                        <td class="px-4 py-3 text-gray-400 text-xs hidden lg:table-cell">{{ c.date_joined|date:"d M Y" }}</td>
+                        <td class="px-4 py-3">
+                            {% if c.is_active %}<span class="bg-green-100 text-green-700 text-xs font-bold px-2.5 py-1 rounded-full">Active</span>
+                            {% else %}<span class="bg-gray-100 text-gray-500 text-xs font-bold px-2.5 py-1 rounded-full">Inactive</span>{% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="5" class="text-center py-12 text-gray-400">No customers yet.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

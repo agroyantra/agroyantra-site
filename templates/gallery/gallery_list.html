@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}Project Gallery | AgroYantra AgriTech Nepal{% endblock %}
+{% block meta_description %}Browse AgroYantra's project gallery — completed greenhouse farms, poultry units, irrigation systems, and agri-infrastructure across Nepal.{% endblock %}
+
+{% block content %}
+<section class="bg-primary-dark text-white py-14 sm:py-20 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-5" style="background-image:repeating-linear-gradient(0deg,#fff,#fff 1px,transparent 1px,transparent 40px),repeating-linear-gradient(90deg,#fff,#fff 1px,transparent 1px,transparent 40px);"></div>
+    <div class="max-w-4xl mx-auto px-4 text-center relative">
+        <span class="text-accent font-bold text-xs uppercase tracking-widest">Our Work</span>
+        <h1 class="text-3xl sm:text-4xl font-extrabold mt-3 mb-4">Project Gallery</h1>
+        <p class="text-gray-300 text-base sm:text-lg">Completed projects, installations, and milestones from across Nepal.</p>
+    </div>
+</section>
+
+<div class="max-w-7xl mx-auto px-4 py-10 sm:py-14">
+    {% if albums %}
+    {% for album in albums %}
+    {% with images=album.images.filter %}
+    <div class="mb-14">
+        <div class="flex items-center justify-between mb-5">
+            <div>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-gray-900">{{ album.title }}</h2>
+                {% if album.description %}<p class="text-gray-500 text-sm mt-1">{{ album.description }}</p>{% endif %}
+            </div>
+            <a href="{% url 'gallery_album' album.slug %}" class="text-sm text-primary hover:underline font-semibold flex-shrink-0 ml-4">
+                View All <i class="fas fa-arrow-right ml-1"></i>
+            </a>
+        </div>
+        <!-- Album images grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4" id="album-{{ album.id }}">
+            {% for img in album.images.all|slice:":8" %}
+            <div class="group relative overflow-hidden rounded-xl aspect-square bg-gray-100 cursor-pointer shadow-sm hover:shadow-lg transition"
+                 onclick="openAlbumLightbox('{{ album.id }}', {{ forloop.counter0 }})">
+                <img src="{{ img.image.url }}" alt="{{ img.title|default:album.title }}" loading="lazy"
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                {% if img.caption or img.title %}
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition flex items-end p-3">
+                    <p class="text-white text-xs font-medium">{{ img.caption|default:img.title }}</p>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        <script>
+        (function(){
+            const imgs{{ album.id }} = [{% for img in album.images.all|slice:":8" %}{src:'{{ img.image.url }}',caption:'{{ img.caption|default:img.title|escapejs }}'}{% if not forloop.last %},{% endif %}{% endfor %}];
+            window['albumImgs{{ album.id }}'] = imgs{{ album.id }};
+        })();
+        function openAlbumLightbox(id, idx) {
+            openLightbox(window['albumImgs'+id], idx);
+        }
+        </script>
+    </div>
+    {% endwith %}
+    {% endfor %}
+    {% else %}
+    <div class="text-center py-20 text-gray-400">
+        <i class="fas fa-images text-6xl mb-4"></i>
+        <p class="text-xl font-medium text-gray-600">Gallery coming soon</p>
+        <p class="text-sm mt-2">Project photos will appear here.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

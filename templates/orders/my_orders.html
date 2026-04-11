@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}My Orders - AgroYantra{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 py-10">
+    <h1 class="text-2xl font-bold text-gray-900 mb-8">
+        <i class="fas fa-box text-primary mr-2"></i>My Orders
+    </h1>
+
+    {% if orders %}
+    <div class="space-y-4">
+        {% for order in orders %}
+        <div class="bg-white rounded-2xl shadow-sm p-6 hover:shadow-md transition">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <p class="text-xs text-gray-400 mb-1">{{ order.created_at|date:"d M Y, g:i A" }}</p>
+                    <p class="font-bold text-gray-900">Order #{{ order.order_number }}</p>
+                    <p class="text-sm text-gray-500 mt-1">{{ order.city }}, {{ order.state }}</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="text-right">
+                        <p class="text-xs text-gray-400">Total</p>
+                        <p class="font-bold text-primary">Rs. {{ order.order_total }}</p>
+                        <p class="text-xs text-gray-500">COD</p>
+                    </div>
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold
+                        {% if order.status == 'New' %}bg-blue-100 text-blue-700
+                        {% elif order.status == 'Accepted' %}bg-yellow-100 text-yellow-700
+                        {% elif order.status == 'Completed' %}bg-green-100 text-green-700
+                        {% elif order.status == 'Cancelled' %}bg-red-100 text-red-700
+                        {% endif %}">
+                        {{ order.status }}
+                    </span>
+                    <a href="{% url 'order_detail' order.order_number %}"
+                        class="text-sm text-primary hover:underline font-medium">
+                        View <i class="fas fa-chevron-right text-xs"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-20 bg-white rounded-2xl shadow-sm text-gray-400">
+        <i class="fas fa-box-open text-6xl mb-4"></i>
+        <p class="text-xl font-medium text-gray-700">No orders yet</p>
+        <a href="{% url 'product_list' %}" class="mt-4 inline-block text-primary hover:underline font-medium">Start Shopping</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

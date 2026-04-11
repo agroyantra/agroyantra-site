@@ -1,0 +1,263 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Agro Yantra - AgriTech Solutions | Equipment, Turnkey Projects & Consulting{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="bg-primary-dark text-white overflow-hidden relative">
+    <!-- Subtle grid pattern overlay -->
+    <div class="absolute inset-0 opacity-5" style="background-image: repeating-linear-gradient(0deg,#fff,#fff 1px,transparent 1px,transparent 40px),repeating-linear-gradient(90deg,#fff,#fff 1px,transparent 1px,transparent 40px);"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 py-24 flex flex-col md:flex-row items-center gap-12">
+        <div class="flex-1 z-10">
+            <span class="inline-flex items-center gap-2 bg-accent/20 border border-accent/40 text-accent text-xs font-bold px-4 py-1.5 rounded-full mb-5 uppercase tracking-widest">
+                <i class="fas fa-microchip"></i> Nepal's AgriTech Leader
+            </span>
+            <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-5">
+                Modern Technology<br><span class="text-accent">For Agriculture &amp; Livestock</span>
+            </h1>
+            <p class="text-gray-300 text-lg mb-8 max-w-lg leading-relaxed">We supply cutting-edge agri equipment, execute end-to-end turnkey projects, and provide expert consulting — empowering Nepal's agriculture and livestock sector.</p>
+            <div class="flex flex-wrap gap-4">
+                <a href="{% url 'product_list' %}" class="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-primary-dark font-black px-8 py-3 rounded-full transition shadow-lg">
+                    <i class="fas fa-th-large"></i> Browse Products
+                </a>
+                <a href="{% url 'contact' %}" class="inline-flex items-center gap-2 border-2 border-accent/60 hover:border-accent text-white hover:text-accent font-bold px-8 py-3 rounded-full transition">
+                    <i class="fas fa-comments"></i> Get Consulting
+                </a>
+            </div>
+        </div>
+        <!-- Hero graphic -->
+        <div class="flex-1 flex justify-center z-10">
+            <div class="relative w-72 h-72">
+                <div class="absolute inset-0 bg-accent/10 rounded-full animate-pulse"></div>
+                <div class="absolute inset-6 bg-accent/10 rounded-full"></div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <svg width="180" height="180" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 20px rgba(163,217,0,0.4))">
+                        <path d="M50 5 L93 78 L7 78 Z" fill="none" stroke="#a3d900" stroke-width="5" stroke-linejoin="round"/>
+                        <path d="M50 95 L7 22 L93 22 Z" fill="none" stroke="#2d9e4f" stroke-width="5" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats bar -->
+    <div class="relative bg-primary/60 border-t border-white/10 py-5">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div><p class="text-2xl font-black text-accent">200+</p><p class="text-xs text-gray-400 mt-0.5 uppercase tracking-wide">Products</p></div>
+            <div><p class="text-2xl font-black text-accent">50+</p><p class="text-xs text-gray-400 mt-0.5 uppercase tracking-wide">Turnkey Projects</p></div>
+            <div><p class="text-2xl font-black text-accent">100+</p><p class="text-xs text-gray-400 mt-0.5 uppercase tracking-wide">Clients Served</p></div>
+            <div><p class="text-2xl font-black text-accent">7</p><p class="text-xs text-gray-400 mt-0.5 uppercase tracking-wide">Provinces Covered</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- Services -->
+<section class="max-w-7xl mx-auto px-4 py-16">
+    <div class="text-center mb-12">
+        <span class="text-accent font-bold text-xs uppercase tracking-widest">What We Do</span>
+        <h2 class="text-3xl font-extrabold text-gray-900 mt-2">Our Core Services</h2>
+        <p class="text-gray-500 mt-3 max-w-xl mx-auto">From a single machine to a complete agri infrastructure — we cover every need.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Equipment -->
+        <div class="bg-white rounded-2xl shadow-sm hover:shadow-lg transition group p-8 border border-gray-100">
+            <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-primary/20 transition">
+                <i class="fas fa-tractor text-primary text-3xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">Equipment Supply</h3>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Tractors, irrigation systems, greenhouses, poultry equipment, fish farming systems, soil testing kits, and more — sourced from trusted global manufacturers.</p>
+            <a href="{% url 'product_list' %}" class="inline-flex items-center gap-1 text-primary font-semibold text-sm hover:text-primary-light transition">
+                Browse Products <i class="fas fa-arrow-right text-xs"></i>
+            </a>
+        </div>
+        <!-- Turnkey -->
+        <div class="bg-primary-dark rounded-2xl shadow-sm hover:shadow-lg transition group p-8 border border-primary">
+            <div class="w-16 h-16 bg-accent/20 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-accent/30 transition">
+                <i class="fas fa-project-diagram text-accent text-3xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-3">Turnkey Projects</h3>
+            <p class="text-gray-400 text-sm leading-relaxed mb-4">Complete project execution — from site assessment and design to installation and handover. Greenhouse farms, poultry units, fish ponds, dairy setups, and irrigation networks.</p>
+            <a href="{% url 'contact' %}" class="inline-flex items-center gap-1 text-accent font-semibold text-sm hover:text-white transition">
+                Enquire Now <i class="fas fa-arrow-right text-xs"></i>
+            </a>
+        </div>
+        <!-- Consulting -->
+        <div class="bg-white rounded-2xl shadow-sm hover:shadow-lg transition group p-8 border border-gray-100">
+            <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-primary/20 transition">
+                <i class="fas fa-chart-line text-primary text-3xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">Expert Consulting</h3>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Feasibility studies, project planning, crop selection, livestock management, finance structuring, and government subsidy guidance for agri entrepreneurs.</p>
+            <a href="{% url 'contact' %}" class="inline-flex items-center gap-1 text-primary font-semibold text-sm hover:text-primary-light transition">
+                Talk to Experts <i class="fas fa-arrow-right text-xs"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Categories -->
+{% if categories %}
+<section class="bg-white py-14">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <span class="text-accent font-bold text-xs uppercase tracking-widest">Browse By Type</span>
+                <h2 class="text-2xl font-extrabold text-gray-900 mt-1">Product Categories</h2>
+            </div>
+            <a href="{% url 'product_list' %}" class="text-primary hover:text-primary-light text-sm font-semibold transition">View all <i class="fas fa-arrow-right ml-1"></i></a>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            {% for category in categories %}
+            <a href="{{ category.get_url }}" class="group bg-gray-50 hover:bg-primary-dark rounded-xl p-4 flex flex-col items-center gap-3 transition border border-gray-100 hover:border-primary">
+                {% if category.cat_image %}
+                <img src="{{ category.cat_image.url }}" alt="{{ category.category_name }}" class="w-14 h-14 rounded-full object-cover">
+                {% else %}
+                <div class="w-14 h-14 rounded-full bg-primary/10 group-hover:bg-accent/20 flex items-center justify-center transition">
+                    <i class="fas fa-cogs text-primary group-hover:text-accent text-xl transition"></i>
+                </div>
+                {% endif %}
+                <span class="text-xs font-bold text-gray-700 group-hover:text-white text-center transition">{{ category.category_name }}</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Featured Products -->
+<section class="max-w-7xl mx-auto px-4 py-14">
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <span class="text-accent font-bold text-xs uppercase tracking-widest">Latest Stock</span>
+            <h2 class="text-2xl font-extrabold text-gray-900 mt-1">Featured Products</h2>
+        </div>
+        <a href="{% url 'product_list' %}" class="text-primary hover:text-primary-light text-sm font-semibold transition">All products <i class="fas fa-arrow-right ml-1"></i></a>
+    </div>
+    {% if products %}
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+        {% for product in products %}
+        <div class="bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition group">
+            <a href="{{ product.get_url }}">
+                {% if product.images %}
+                <img src="{{ product.images.url }}" alt="{{ product.product_name }}"
+                    class="w-full h-44 object-cover rounded-t-xl group-hover:opacity-90 transition">
+                {% else %}
+                <div class="w-full h-44 bg-gray-50 rounded-t-xl flex items-center justify-center">
+                    <i class="fas fa-cog text-gray-300 text-4xl"></i>
+                </div>
+                {% endif %}
+            </a>
+            <div class="p-4">
+                <a href="{{ product.get_url }}">
+                    <h3 class="font-bold text-gray-800 text-sm truncate hover:text-primary transition">{{ product.product_name }}</h3>
+                </a>
+                <p class="text-xs text-gray-400 mt-0.5">{{ product.category.category_name }}</p>
+                <div class="flex items-center justify-between mt-3">
+                    <span class="text-primary font-black">Rs. {{ product.price }}</span>
+                    {% if product.stock > 0 %}
+                    <a href="{% url 'add_cart' product.id %}"
+                        class="bg-primary hover:bg-primary-dark text-white text-xs font-bold px-3 py-1.5 rounded-full transition">
+                        <i class="fas fa-cart-plus mr-1"></i>Add
+                    </a>
+                    {% else %}
+                    <span class="text-xs text-red-400 font-medium">Out of Stock</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-16 bg-white rounded-2xl border border-gray-100 text-gray-400">
+        <i class="fas fa-box-open text-5xl mb-4"></i>
+        <p class="text-lg font-medium">Products coming soon. Check back shortly!</p>
+    </div>
+    {% endif %}
+</section>
+
+<!-- Sectors We Serve -->
+<section class="bg-primary-dark py-16">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12">
+            <span class="text-accent font-bold text-xs uppercase tracking-widest">Our Expertise</span>
+            <h2 class="text-3xl font-extrabold text-white mt-2">Sectors We Serve</h2>
+            <p class="text-gray-400 mt-3 max-w-xl mx-auto">From smallholder farms to commercial agri-enterprises — we have the technology and expertise.</p>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div class="text-center p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-accent/40 transition">
+                <i class="fas fa-leaf text-accent text-4xl mb-3"></i>
+                <h3 class="font-bold text-white text-sm">Crop Farming</h3>
+                <p class="text-gray-500 text-xs mt-1">Irrigation, greenhouse, soil tech</p>
+            </div>
+            <div class="text-center p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-accent/40 transition">
+                <i class="fas fa-drumstick-bite text-accent text-4xl mb-3"></i>
+                <h3 class="font-bold text-white text-sm">Poultry</h3>
+                <p class="text-gray-500 text-xs mt-1">Layer, broiler & hatchery setups</p>
+            </div>
+            <div class="text-center p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-accent/40 transition">
+                <i class="fas fa-fish text-accent text-4xl mb-3"></i>
+                <h3 class="font-bold text-white text-sm">Aquaculture</h3>
+                <p class="text-gray-500 text-xs mt-1">Fish farming ponds & systems</p>
+            </div>
+            <div class="text-center p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-accent/40 transition">
+                <i class="fas fa-cow text-accent text-4xl mb-3"></i>
+                <h3 class="font-bold text-white text-sm">Livestock</h3>
+                <p class="text-gray-500 text-xs mt-1">Dairy, goat & cattle farm tech</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why AgroYantra -->
+<section class="max-w-7xl mx-auto px-4 py-16">
+    <div class="text-center mb-12">
+        <span class="text-accent font-bold text-xs uppercase tracking-widest">Why Choose Us</span>
+        <h2 class="text-3xl font-extrabold text-gray-900 mt-2">The AgroYantra Advantage</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="text-center p-6 bg-white rounded-2xl shadow-sm hover:shadow-md transition">
+            <div class="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-certificate text-primary text-2xl"></i>
+            </div>
+            <h3 class="font-bold text-lg mb-2">Quality Assured</h3>
+            <p class="text-gray-500 text-sm">All equipment is sourced from certified manufacturers with warranty, after-sales support and spare parts availability in Nepal.</p>
+        </div>
+        <div class="text-center p-6 bg-white rounded-2xl shadow-sm hover:shadow-md transition">
+            <div class="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-tools text-primary text-2xl"></i>
+            </div>
+            <h3 class="font-bold text-lg mb-2">End-to-End Support</h3>
+            <p class="text-gray-500 text-sm">From concept to commissioning — our team handles planning, procurement, installation, training, and ongoing maintenance.</p>
+        </div>
+        <div class="text-center p-6 bg-white rounded-2xl shadow-sm hover:shadow-md transition">
+            <div class="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-hand-holding-usd text-primary text-2xl"></i>
+            </div>
+            <h3 class="font-bold text-lg mb-2">Cash on Delivery</h3>
+            <p class="text-gray-500 text-sm">Order online, pay on delivery. No advance payment required for standard equipment orders across all provinces of Nepal.</p>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Banner -->
+<section class="max-w-7xl mx-auto px-4 pb-16">
+    <div class="bg-gradient-to-r from-primary-dark to-primary rounded-3xl p-10 md:p-14 flex flex-col md:flex-row items-center justify-between gap-8">
+        <div>
+            <h2 class="text-2xl md:text-3xl font-extrabold text-white mb-2">Have an Agri Project in Mind?</h2>
+            <p class="text-green-300">Talk to our experts for a free consultation and project feasibility study.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4 flex-shrink-0">
+            <a href="{% url 'contact' %}" class="inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-dark text-primary-dark font-black px-8 py-3 rounded-full transition shadow-lg">
+                <i class="fas fa-phone"></i> Contact Us
+            </a>
+            <a href="{% url 'product_list' %}" class="inline-flex items-center justify-center gap-2 border-2 border-white/40 hover:border-white text-white font-bold px-8 py-3 rounded-full transition">
+                <i class="fas fa-th"></i> View Products
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
