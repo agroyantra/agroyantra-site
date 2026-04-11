@@ -5,11 +5,26 @@ After=network.target
 [Service]
 User=www-data
 Group=www-data
-WorkingDirectory=/var/www/agroyantra
-ExecStart=/var/www/agroyantra/venv/bin/gunicorn \
-    --config /var/www/agroyantra/gunicorn.conf.py \
+
+WorkingDirectory=/var/www/agroyantra-site
+
+Environment="PATH=/var/www/agroyantra-site/venv/bin"
+Environment="DJANGO_SETTINGS_MODULE=ojasecommerce.settings_prod"
+Environment="HOME=/var/www/agroyantra-site"
+
+RuntimeDirectory=agroyantra
+RuntimeDirectoryMode=755
+
+ExecStart=/var/www/agroyantra-site/venv/bin/gunicorn \
+    --workers 3 \
+    --bind unix:/run/agroyantra/agroyantra.sock \
+    --access-logfile - \
+    --error-logfile - \
+    --capture-output \
     ojasecommerce.wsgi:application
-Restart=on-failure
+
+Restart=always
+RestartSec=3
 
 [Install]
 WantedBy=multi-user.target
