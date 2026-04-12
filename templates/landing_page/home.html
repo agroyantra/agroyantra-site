@@ -156,7 +156,11 @@
                 </a>
                 <p class="text-xs text-gray-400 mt-0.5">{{ product.category.category_name }}</p>
                 <div class="flex items-center justify-between mt-3">
+                    {% if product.show_price and product.price %}
                     <span class="text-primary font-black">Rs. {{ product.price }}</span>
+                    {% else %}
+                    <span class="text-xs text-primary font-semibold italic">Contact for price</span>
+                    {% endif %}
                     {% if product.stock > 0 %}
                     <a href="{% url 'add_cart' product.id %}"
                         class="bg-primary hover:bg-primary-dark text-white text-xs font-bold px-3 py-1.5 rounded-full transition">
